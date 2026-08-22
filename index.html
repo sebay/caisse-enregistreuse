@@ -38,35 +38,32 @@
       margin-bottom: 15px;
     }
 
-    /* ÉCRAN DE CAISSE ÉPURÉ */
+    /* ÉCRAN DE CAISSE ÉPURÉ ET COMPACT */
     .register-screen {
       background: #021a12;
       border: 4px solid #064e3b;
       border-radius: 12px;
-      padding: 20px;
+      padding: 12px 15px;
       box-shadow: inset 0 0 15px rgba(0, 0, 0, 0.9), 0 0 10px rgba(16, 185, 129, 0.2);
       font-family: 'VT323', monospace;
       display: flex;
-      flex-direction: column;
       justify-content: center;
       align-items: center;
       text-align: center;
     }
 
-    .screen-label {
-      font-size: 1.4rem;
-      color: #10b981;
-      letter-spacing: 2px;
-      margin-bottom: 5px;
-      text-shadow: 0 0 5px rgba(16, 185, 129, 0.5);
-    }
-
-    .screen-val {
-      font-size: 3.5rem;
+    .screen-line {
+      font-size: 2.8rem;
       font-weight: bold;
       color: #34d399;
       text-shadow: 0 0 12px rgba(52, 211, 153, 0.8);
       line-height: 1;
+      letter-spacing: 1px;
+    }
+
+    .screen-label {
+      color: #10b981;
+      text-shadow: 0 0 5px rgba(16, 185, 129, 0.5);
     }
 
     /* DROITE: ARGENT REÇU */
@@ -392,6 +389,9 @@
       .register-container {
         grid-template-columns: 1fr;
       }
+      .screen-line {
+        font-size: 2.2rem;
+      }
     }
   </style>
 </head>
@@ -401,10 +401,9 @@
 
   <div class="register-container">
     
-    <!-- ÉCRAN DE CAISSE UNIQUE : TOTAL UNIQUEMENT -->
+    <!-- ÉCRAN DE CAISSE UNIQUE : TOTAL SANS DEUX-POINTS -->
     <div class="register-screen">
-      <div class="screen-label">TOTAL À PAYER</div>
-      <div class="screen-val" id="item-cost">0,00 €</div>
+      <div class="screen-line"><span class="screen-label">Total </span><span id="item-cost">0,00 €</span></div>
     </div>
 
     <!-- ARGENT REÇU DU CLIENT -->
