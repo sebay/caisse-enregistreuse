@@ -1,0 +1,601 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Caisse Enregistreuse</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=VT323&display=swap');
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #0f172a;
+      color: #f8fafc;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      margin: 0;
+      padding: 15px;
+      box-sizing: border-box;
+    }
+
+    .game-card {
+      background: #1e293b;
+      padding: 20px;
+      border-radius: 20px;
+      box-shadow: 0 12px 32px rgba(0, 0, 0, 0.4);
+      max-width: 850px;
+      width: 100%;
+    }
+
+    .header-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 15px;
+      border-bottom: 2px solid #334155;
+      padding-bottom: 10px;
+    }
+
+    h2 {
+      margin: 0;
+      font-size: 1.4rem;
+      color: #38bdf8;
+    }
+
+    .score-board {
+      display: flex;
+      gap: 12px;
+      font-size: 0.9rem;
+      font-weight: bold;
+    }
+
+    .score-item {
+      padding: 6px 12px;
+      border-radius: 8px;
+    }
+
+    .score-success { color: #4ade80; border: 1px solid #166534; background: #052e16; }
+    .score-error { color: #f87171; border: 1px solid #991b1b; background: #450a0a; }
+
+    /* LAYOUT À DEUX COLONNES */
+    .register-container {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+      margin-bottom: 15px;
+    }
+
+    /* ÉCRAN DE CAISSE ÉPURÉ */
+    .register-screen {
+      background: #021a12;
+      border: 4px solid #064e3b;
+      border-radius: 12px;
+      padding: 20px;
+      box-shadow: inset 0 0 15px rgba(0, 0, 0, 0.9), 0 0 10px rgba(16, 185, 129, 0.2);
+      font-family: 'VT323', monospace;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+    }
+
+    .screen-label {
+      font-size: 1.4rem;
+      color: #10b981;
+      letter-spacing: 2px;
+      margin-bottom: 5px;
+      text-shadow: 0 0 5px rgba(16, 185, 129, 0.5);
+    }
+
+    .screen-val {
+      font-size: 3.5rem;
+      font-weight: bold;
+      color: #34d399;
+      text-shadow: 0 0 12px rgba(52, 211, 153, 0.8);
+      line-height: 1;
+    }
+
+    /* DROITE: ARGENT REÇU */
+    .customer-area {
+      background: #0f172a;
+      border: 2px solid #334155;
+      border-radius: 12px;
+      padding: 15px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .customer-title {
+      font-size: 0.9rem;
+      font-weight: bold;
+      color: #94a3b8;
+      margin-bottom: 10px;
+    }
+
+    .visual-cash-container {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: center;
+      align-content: flex-start;
+      flex-grow: 1;
+      min-height: 100px;
+      background: #1e293b;
+      padding: 10px;
+      border-radius: 8px;
+      border: 1px dashed #475569;
+    }
+
+    .given-section {
+      background: #0f172a;
+      border: 2px solid #334155;
+      padding: 12px;
+      border-radius: 12px;
+      margin-bottom: 15px;
+    }
+
+    .given-header {
+      display: flex;
+      justify-content: space-between;
+      font-weight: bold;
+      margin-bottom: 6px;
+      font-size: 0.95rem;
+    }
+
+    .sub-text {
+      font-size: 0.8rem;
+      color: #94a3b8;
+      font-weight: normal;
+    }
+
+    .tray-section-title {
+      font-weight: bold;
+      font-size: 0.9rem;
+      margin-bottom: 8px;
+      color: #cbd5e1;
+    }
+
+    .tray {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      justify-content: center;
+      margin-bottom: 15px;
+      background: #0f172a;
+      padding: 12px;
+      border-radius: 12px;
+      border: 1px solid #334155;
+    }
+
+    .cash-item {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.4);
+      user-select: none;
+      box-sizing: border-box;
+      position: relative;
+    }
+
+    .real-note {
+      width: 110px;
+      height: 58px;
+      border-radius: 5px;
+      border: 2px solid #0f172a;
+      overflow: hidden;
+      flex-shrink: 0;
+    }
+
+    .real-note-50 { background-color: #d97706; }
+    .real-note-20 { background-color: #2563eb; }
+    .real-note-10 { background-color: #dc2626; }
+    .real-note-5  { background-color: #4b5563; }
+
+    .note-content {
+      width: calc(100% - 6px);
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: 3px 5px;
+      box-sizing: border-box;
+      color: #ffffff;
+      background-color: inherit;
+    }
+
+    .note-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.5rem;
+      font-weight: bold;
+      background-color: rgba(0, 0, 0, 0.25);
+      padding: 1px 3px;
+      border-radius: 2px;
+    }
+
+    .note-body {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+    }
+
+    .note-val-large {
+      font-size: 1.5rem;
+      font-family: 'Arial Black', sans-serif;
+      font-weight: 900;
+      line-height: 0.9;
+      color: #ffffff;
+    }
+
+    .note-arch {
+      width: 22px;
+      height: 25px;
+      background-color: #ffffff;
+      border-radius: 10px 10px 0 0;
+      border: 1.5px solid #0f172a;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #0f172a;
+      font-size: 0.5rem;
+      font-weight: bold;
+    }
+
+    .note-band {
+      width: 6px;
+      height: 100%;
+      background-color: #fbbf24;
+      border-left: 1px solid #0f172a;
+      position: absolute;
+      right: 0;
+      top: 0;
+    }
+
+    .coin {
+      border-radius: 50%;
+      color: #0f172a;
+      font-weight: bold;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .coin-200 { width: 44px; height: 44px; font-size: 0.85rem; background: #e2e8f0; border: 3px solid #d97706; }
+    .coin-100 { width: 40px; height: 40px; font-size: 0.8rem; background: #d97706; border: 3px solid #cbd5e0; }
+    
+    .coin-gold { background: #f59e0b; border: 2px solid #b45309; color: #78350f; }
+    .coin-50  { width: 38px; height: 38px; font-size: 0.8rem; }
+    .coin-20  { width: 35px; height: 35px; font-size: 0.75rem; }
+    .coin-10  { width: 32px; height: 32px; font-size: 0.7rem; }
+    
+    .coin-copper { background: #ea580c; color: #ffffff; border: 2px solid #9a3412; }
+    .coin-5   { width: 32px; height: 32px; font-size: 0.7rem; }
+    .coin-2   { width: 28px; height: 28px; font-size: 0.65rem; }
+    .coin-1   { width: 25px; height: 25px; font-size: 0.6rem; }
+
+    .btn-cash {
+      cursor: pointer;
+      transition: transform 0.1s ease, filter 0.1s ease;
+    }
+    .btn-cash:hover {
+      filter: brightness(1.2);
+      transform: translateY(-2px);
+    }
+    .btn-cash:active {
+      transform: scale(0.92);
+    }
+
+    .removable:hover {
+      filter: brightness(0.8);
+      outline: 2px solid #ef4444;
+      border-radius: 6px;
+    }
+
+    .action-btns {
+      display: flex;
+      gap: 10px;
+    }
+    .action-btns button {
+      flex: 1;
+      padding: 12px;
+      border: none;
+      border-radius: 8px;
+      font-weight: bold;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .btn-submit { background: #16a34a; color: white; }
+    .btn-submit:hover { background: #15803d; }
+    .btn-clear { background: #dc2626; color: white; }
+    .btn-clear:hover { background: #b91c1c; }
+
+    .feedback {
+      margin-top: 12px;
+      font-size: 1rem;
+      font-weight: bold;
+      min-height: 25px;
+      text-align: center;
+    }
+    .correct { color: #4ade80; }
+    .incorrect { color: #f87171; }
+
+    @media (max-width: 650px) {
+      .register-container {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<div class="game-card">
+  <div class="header-bar">
+    <h2>💶 Caisse Enregistreuse</h2>
+    <div class="score-board">
+      <div class="score-item score-success">✅ Réussis (1er coup) : <span id="score-correct">0</span></div>
+      <div class="score-item score-error">❌ Erreurs : <span id="score-errors">0</span></div>
+    </div>
+  </div>
+
+  <div class="register-container">
+    
+    <!-- ÉCRAN DE CAISSE UNIQUE : TOTAL UNUNIQUEMENT -->
+    <div class="register-screen">
+      <div class="screen-label">TOTAL À PAYER</div>
+      <div class="screen-val" id="item-cost">0,00 €</div>
+    </div>
+
+    <!-- ARGENT REÇU DU CLIENT -->
+    <div class="customer-area">
+      <div class="customer-title">✋ Donné par le client :</div>
+      <div id="customer-paid-visual" class="visual-cash-container"></div>
+    </div>
+
+  </div>
+
+  <!-- MONNAIE RENDUE -->
+  <div class="given-section">
+    <div class="given-header">
+      <span>Monnaie à rendre : <span id="user-total" style="color: #38bdf8;">0,00 €</span></span>
+      <span class="sub-text">(Cliquez sur un billet/pièce pour le retirer)</span>
+    </div>
+    <div id="user-given-visual" class="visual-cash-container" style="min-height: 60px; background: #0f172a;"></div>
+  </div>
+
+  <!-- TIROIR CAISSE -->
+  <div class="tray-section-title">Cliquez sur les pièces et billets pour donner la monnaie :</div>
+  <div class="tray" id="tray"></div>
+
+  <!-- BOUTONS -->
+  <div class="action-btns">
+    <button class="btn-clear" onclick="clearSelection()">Tout effacer</button>
+    <button class="btn-submit" onclick="checkAnswer()">Rendre la monnaie</button>
+  </div>
+
+  <div class="feedback" id="feedback"></div>
+</div>
+
+<script>
+  let itemCost = 0;
+  let customerPaid = 0;
+  let userGiven = 0;
+  let userGivenItems = [];
+  
+  let scoreCorrect = 0;
+  let scoreErrors = 0;
+  let isFirstAttempt = true;
+
+  const denominations = [
+    { name: '50 €', value: 50.00, type: 'note', class: 'real-note-50', valStr: '50' },
+    { name: '20 €', value: 20.00, type: 'note', class: 'real-note-20', valStr: '20' },
+    { name: '10 €', value: 10.00, type: 'note', class: 'real-note-10', valStr: '10' },
+    { name: '5 €',  value: 5.00,  type: 'note', class: 'real-note-5',  valStr: '5' },
+    { name: '2 €',  value: 2.00,  type: 'coin', class: 'coin coin-200' },
+    { name: '1 €',  value: 1.00,  type: 'coin', class: 'coin coin-100' },
+    { name: '50c',  value: 0.50,  type: 'coin', class: 'coin coin-gold coin-50' },
+    { name: '20c',  value: 0.20,  type: 'coin', class: 'coin coin-gold coin-20' },
+    { name: '10c',  value: 0.10,  type: 'coin', class: 'coin coin-gold coin-10' },
+    { name: '5c',   value: 0.05,  type: 'coin', class: 'coin coin-copper coin-5' },
+    { name: '2c',   value: 0.02,  type: 'coin', class: 'coin coin-copper coin-2' },
+    { name: '1c',   value: 0.01,  type: 'coin', class: 'coin coin-copper coin-1' }
+  ];
+
+  function formatEuro(amount) {
+    return amount.toFixed(2).replace('.', ',') + ' €';
+  }
+
+  function createCashElement(item) {
+    const el = document.createElement('div');
+    if (item.type === 'note') {
+      el.className = `cash-item real-note ${item.class}`;
+      el.innerHTML = `
+        <div class="note-content">
+          <div class="note-header">
+            <span>BCE EKP</span>
+            <span>EURO</span>
+          </div>
+          <div class="note-body">
+            <span class="note-val-large">${item.valStr}</span>
+            <div class="note-arch">🏛️</div>
+          </div>
+        </div>
+        <div class="note-band"></div>
+      `;
+    } else {
+      el.className = `cash-item ${item.class}`;
+      el.innerText = item.name;
+    }
+    el.title = item.name;
+    return el;
+  }
+
+  function renderTray() {
+    const tray = document.getElementById('tray');
+    tray.innerHTML = '';
+    denominations.forEach(d => {
+      const btn = createCashElement(d);
+      btn.classList.add('btn-cash');
+      btn.onclick = () => addMoney(d);
+      tray.appendChild(btn);
+    });
+  }
+
+  function newTransaction() {
+    userGiven = 0;
+    userGivenItems = [];
+    isFirstAttempt = true;
+    document.getElementById('feedback').innerText = '';
+    updateUserDisplay();
+
+    itemCost = Math.round((Math.random() * 44.9 + 0.10) * 100) / 100;
+    
+    const payment = generateStrictRealisticPayment(itemCost);
+    customerPaid = payment.total;
+
+    document.getElementById('item-cost').innerText = formatEuro(itemCost);
+    renderCustomerPayment(payment.items);
+  }
+
+  function generateStrictRealisticPayment(cost) {
+    const options = [];
+
+    [5, 10, 20, 50].forEach(val => {
+      if (val >= cost) options.push([getDenom(val)]);
+    });
+
+    let strictNotes = getMinimalNotesFor(cost);
+    if (strictNotes.length > 0) options.push(strictNotes);
+
+    let cents = Math.round((cost - Math.floor(cost)) * 100);
+    if (cents > 0) {
+      let baseCost = Math.floor(cost);
+      let baseNotes = getMinimalNotesFor(baseCost);
+      let baseSum = baseNotes.reduce((a, b) => a + b.value, 0);
+
+      if (baseSum <= cost && baseSum > 0) {
+        [0.50, 1.00, 2.00].forEach(addVal => {
+          if (baseSum + addVal >= cost) {
+            options.push([...baseNotes, getDenom(addVal)]);
+          }
+        });
+      }
+    }
+
+    const validOptions = options.filter(opt => {
+      let tot = opt.reduce((sum, item) => sum + item.value, 0);
+      return tot >= cost;
+    });
+
+    const selectedItems = validOptions[Math.floor(Math.random() * validOptions.length)];
+    const total = Math.round(selectedItems.reduce((sum, item) => sum + item.value, 0) * 100) / 100;
+
+    return { total: total, items: selectedItems };
+  }
+
+  function getMinimalNotesFor(amount) {
+    if (amount <= 0) return [];
+    let combo = [];
+    let rem = amount;
+    [50, 20, 10, 5].forEach(val => {
+      while (rem >= val) {
+        combo.push(getDenom(val));
+        rem -= val;
+      }
+    });
+    if (rem > 0 && combo.reduce((a,b)=>a+b.value,0) < amount) {
+      let currentSum = combo.reduce((a,b)=>a+b.value,0);
+      let diff = amount - currentSum;
+      let nextNote = [5, 10, 20, 50].find(v => v >= diff);
+      if (nextNote) combo.push(getDenom(nextNote));
+    }
+    return combo;
+  }
+
+  function getDenom(value) {
+    return denominations.find(d => Math.abs(d.value - value) < 0.001);
+  }
+
+  function renderCustomerPayment(items) {
+    const container = document.getElementById('customer-paid-visual');
+    container.innerHTML = '';
+    items.forEach(item => {
+      container.appendChild(createCashElement(item));
+    });
+  }
+
+  function addMoney(item) {
+    userGiven = Math.round((userGiven + item.value) * 100) / 100;
+    userGivenItems.push(item);
+    updateUserDisplay();
+  }
+
+  function removeMoney(index) {
+    const removedItem = userGivenItems.splice(index, 1)[0];
+    userGiven = Math.round((userGiven - removedItem.value) * 100) / 100;
+    if (userGiven < 0) userGiven = 0;
+    updateUserDisplay();
+  }
+
+  function clearSelection() {
+    userGiven = 0;
+    userGivenItems = [];
+    updateUserDisplay();
+  }
+
+  function updateUserDisplay() {
+    document.getElementById('user-total').innerText = formatEuro(userGiven);
+    const container = document.getElementById('user-given-visual');
+    container.innerHTML = '';
+    
+    userGivenItems.forEach((item, index) => {
+      const el = createCashElement(item);
+      el.classList.add('btn-cash', 'removable');
+      el.onclick = () => removeMoney(index);
+      container.appendChild(el);
+    });
+  }
+
+  function checkAnswer() {
+    const correctChange = Math.round((customerPaid - itemCost) * 100) / 100;
+    const feedbackEl = document.getElementById('feedback');
+    const diff = Math.round((userGiven - correctChange) * 100) / 100;
+
+    if (Math.abs(diff) < 0.001) {
+      feedbackEl.className = 'feedback correct';
+      feedbackEl.innerText = '🎉 Bravo ! C\'est la bonne monnaie !';
+      
+      if (isFirstAttempt) {
+        scoreCorrect++;
+        document.getElementById('score-correct').innerText = scoreCorrect;
+      }
+      
+      setTimeout(newTransaction, 2200);
+    } else {
+      if (isFirstAttempt) {
+        scoreErrors++;
+        document.getElementById('score-errors').innerText = scoreErrors;
+        isFirstAttempt = false;
+      }
+
+      feedbackEl.className = 'feedback incorrect';
+      if (diff > 0) {
+        feedbackEl.innerText = `😮 TROP RENDU ! Tu as donné ${formatEuro(userGiven)}, au lieu de ${formatEuro(correctChange)} (retire ${formatEuro(diff)}).`;
+      } else {
+        feedbackEl.innerText = `⚠️ PAS ASSEZ RENDU ! Tu as donné ${formatEuro(userGiven)}, au lieu de ${formatEuro(correctChange)} (rajoute ${formatEuro(Math.abs(diff))}).`;
+      }
+    }
+  }
+
+  renderTray();
+  newTransaction();
+</script>
+
+</body>
+</html>
