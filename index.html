@@ -66,38 +66,38 @@
       text-shadow: 0 0 5px rgba(16, 185, 129, 0.5);
     }
 
-    /* DROITE: ARGENT REÇU */
+    /* DROITE: ARGENT REÇU (PADDINGS ET MARGES RÉDUITS) */
     .customer-area {
       background: #0f172a;
       border: 2px solid #334155;
       border-radius: 12px;
-      padding: 15px;
+      padding: 8px 12px;
       display: flex;
       flex-direction: column;
     }
 
     .customer-title {
-      font-size: 0.9rem;
+      font-size: 0.85rem;
       font-weight: bold;
       color: #94a3b8;
-      margin-bottom: 10px;
+      margin-bottom: 6px;
     }
 
     .visual-cash-container {
       display: flex;
       flex-wrap: wrap;
-      gap: 10px;
+      gap: 8px;
       align-items: center;
       align-content: flex-start;
       flex-grow: 1;
-      min-height: 100px;
+      min-height: 75px;
       background: #1e293b;
-      padding: 10px;
+      padding: 8px;
       border-radius: 8px;
       border: 1px dashed #475569;
     }
 
-    /* MONNAIE À RENDRE + BOUTON RENDRE DANS LE MÊME CADRE */
+    /* MONNAIE À RENDRE ET BOUTON RENDRE DANS LE MÊME CADRE */
     .given-section {
       background: #0f172a;
       border: 2px solid #334155;
@@ -403,12 +403,10 @@
 
   <div class="register-container">
     
-    <!-- ÉCRAN DE CAISSE UNIQUE -->
     <div class="register-screen">
       <div class="screen-line"><span class="screen-label">Total </span><span id="item-cost">0,00 €</span></div>
     </div>
 
-    <!-- ARGENT REÇU DU CLIENT -->
     <div class="customer-area">
       <div class="customer-title">✋ Donné par le client :</div>
       <div id="customer-paid-visual" class="visual-cash-container"></div>
@@ -416,7 +414,6 @@
 
   </div>
 
-  <!-- MONNAIE RENDUE ET BOUTON RENDRE -->
   <div class="given-section">
     <div class="given-header">
       <span>Monnaie à rendre : <span id="user-total" style="color: #38bdf8;">0,00 €</span></span>
@@ -425,13 +422,11 @@
     <div id="user-given-visual" class="visual-cash-container" style="min-height: 60px; background: #0f172a;"></div>
   </div>
 
-  <!-- TIROIR CAISSE -->
   <div class="tray-section-title">Cliquez pour donner la monnaie :</div>
   <div class="tray" id="tray"></div>
 
 </div>
 
-<!-- POPUP MODALE DE RÉSULTAT ET COMPTEURS -->
 <div class="modal-overlay" id="result-modal">
   <div class="modal-card">
     <div class="modal-icon" id="modal-icon">🎉</div>
