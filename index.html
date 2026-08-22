@@ -116,12 +116,6 @@
       font-size: 0.95rem;
     }
 
-    .sub-text {
-      font-size: 0.8rem;
-      color: #94a3b8;
-      font-weight: normal;
-    }
-
     .tray-section-title {
       font-weight: bold;
       font-size: 0.9rem;
@@ -425,7 +419,6 @@
   <div class="given-section">
     <div class="given-header">
       <span>Monnaie à rendre : <span id="user-total" style="color: #38bdf8;">0,00 €</span></span>
-      <span class="sub-text">(Cliquez sur un billet/pièce pour le retirer)</span>
     </div>
     <div id="user-given-visual" class="visual-cash-container" style="min-height: 60px; background: #0f172a;"></div>
   </div>
@@ -675,7 +668,7 @@
       } else {
         msgEl.innerText = `Pas assez rendu ! Vous avez donné ${formatEuro(userGiven)} au lieu de ${formatEuro(correctChange)} (rajoutez ${formatEuro(Math.abs(diff))}).`;
       }
-      btnEl.innerText = 'Ressayer';
+      btnEl.innerText = 'Réessayer';
 
       if (isFirstAttempt) {
         scoreErrors++;
