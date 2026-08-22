@@ -97,6 +97,7 @@
       border: 1px dashed #475569;
     }
 
+    /* MONNAIE À RENDRE + BOUTON RENDRE DANS LE MÊME CADRE */
     .given-section {
       background: #0f172a;
       border: 2px solid #334155;
@@ -108,9 +109,30 @@
     .given-header {
       display: flex;
       justify-content: space-between;
+      align-items: center;
       font-weight: bold;
-      margin-bottom: 6px;
+      margin-bottom: 8px;
       font-size: 0.95rem;
+    }
+
+    .btn-submit-inline {
+      background: #16a34a;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      padding: 8px 18px;
+      font-weight: bold;
+      font-size: 0.95rem;
+      cursor: pointer;
+      transition: background 0.2s, transform 0.1s;
+    }
+
+    .btn-submit-inline:hover {
+      background: #15803d;
+    }
+
+    .btn-submit-inline:active {
+      transform: scale(0.96);
     }
 
     .tray-section-title {
@@ -125,7 +147,6 @@
       flex-wrap: wrap;
       gap: 10px;
       justify-content: center;
-      margin-bottom: 15px;
       background: #0f172a;
       padding: 12px;
       border-radius: 12px;
@@ -259,25 +280,6 @@
       border-radius: 6px;
     }
 
-    .action-btns {
-      display: flex;
-      gap: 10px;
-    }
-    .action-btns button {
-      flex: 1;
-      padding: 12px;
-      border: none;
-      border-radius: 8px;
-      font-weight: bold;
-      font-size: 1rem;
-      cursor: pointer;
-      transition: background 0.2s;
-    }
-    .btn-submit { background: #16a34a; color: white; }
-    .btn-submit:hover { background: #15803d; }
-    .btn-clear { background: #dc2626; color: white; }
-    .btn-clear:hover { background: #b91c1c; }
-
     /* MODALE / POPUP DE RÉSULTAT */
     .modal-overlay {
       position: fixed;
@@ -401,7 +403,7 @@
 
   <div class="register-container">
     
-    <!-- ÉCRAN DE CAISSE UNIQUE : TOTAL SANS DEUX-POINTS -->
+    <!-- ÉCRAN DE CAISSE UNIQUE -->
     <div class="register-screen">
       <div class="screen-line"><span class="screen-label">Total </span><span id="item-cost">0,00 €</span></div>
     </div>
@@ -414,10 +416,11 @@
 
   </div>
 
-  <!-- MONNAIE RENDUE -->
+  <!-- MONNAIE RENDUE ET BOUTON RENDRE -->
   <div class="given-section">
     <div class="given-header">
       <span>Monnaie à rendre : <span id="user-total" style="color: #38bdf8;">0,00 €</span></span>
+      <button class="btn-submit-inline" onclick="checkAnswer()">Rendre</button>
     </div>
     <div id="user-given-visual" class="visual-cash-container" style="min-height: 60px; background: #0f172a;"></div>
   </div>
@@ -425,12 +428,6 @@
   <!-- TIROIR CAISSE -->
   <div class="tray-section-title">Cliquez pour donner la monnaie :</div>
   <div class="tray" id="tray"></div>
-
-  <!-- BOUTONS -->
-  <div class="action-btns">
-    <button class="btn-clear" onclick="clearSelection()">Tout effacer</button>
-    <button class="btn-submit" onclick="checkAnswer()">Rendre la monnaie</button>
-  </div>
 
 </div>
 
@@ -614,12 +611,6 @@
     const removedItem = userGivenItems.splice(index, 1)[0];
     userGiven = Math.round((userGiven - removedItem.value) * 100) / 100;
     if (userGiven < 0) userGiven = 0;
-    updateUserDisplay();
-  }
-
-  function clearSelection() {
-    userGiven = 0;
-    userGivenItems = [];
     updateUserDisplay();
   }
 
